@@ -9,6 +9,8 @@
 #include "hardware/pio.h"
 #include "inc/ssd1306.h"
 #include "inc/font.h"
+#include "Trabalho01.pio.h"
+#include "inc/config_matriz.h"
 
 #define I2C_PORT i2c1
 #define I2C_SDA 14
@@ -30,6 +32,9 @@
 #define SQUARE_SIZE 8
 #define TAM_SENHA 7
 const char senha_correta[] = "7355608";
+
+PIO pio_config();
+void define_numero(char numero, PIO pio, uint sm);
 
 ssd1306_t ssd;
 uint static volatile ultimoTime = 0;
@@ -99,6 +104,8 @@ void blink_color(uint pin, int seconds) {
 
 void bombaPlantada(){
 
+    PIO pio = pio_config();
+
     char senha_digitada[TAM_SENHA + 1] = {0}; // +1 pro '\0'
     int i = 0;
 
@@ -136,6 +143,11 @@ if (strcmp(senha_digitada, senha_correta) == 0) {
 
     // 3) Pisca verde por 10 s
     blink_color(vermelho, 5);
+
+    for(int i; i < 6; i++){
+      define_numero(i, pio, 0);
+      sleep_ms(250);
+    }
 } else {
     ssd1306_draw_string(&ssd, "ERROU!", 30, 50);
     gpio_put(vermelho, 1);

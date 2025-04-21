@@ -23,15 +23,13 @@ include(pico_sdk_import.cmake)
 project(trabalho01 C CXX ASM) 
 pico_sdk_init()
 
-# Generate PIO header
-pico_generate_pio_header(Trabalho01 ${CMAKE_CURRENT_LIST_DIR}/Trabalho01.pio)
-
-
 add_executable(${PROJECT_NAME}  
         Trabalho01.c # Código principal em C
         inc/ssd1306.c # Biblioteca para o display OLED
         Trabalho01.pio
         )
+
+pico_generate_pio_header(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/Trabalho01.pio)
 
 target_link_libraries(${PROJECT_NAME} 
         pico_stdlib 
